@@ -105,6 +105,10 @@ button:hover {
   align-items: flex-start;
 }
 
+.copy-field .copy-row input {
+  flex: 1;
+}
+
 .copy-field code {
   flex: 1;
   display: block;

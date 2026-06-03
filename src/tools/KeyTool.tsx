@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
 import CopyField from '../components/CopyField'
+import CopyInput from '../components/CopyInput'
 import Section from '../components/Section'
 
 /** Generates a random private key, or derives public key + address from a pasted one. */
@@ -25,15 +26,13 @@ export default function KeyTool() {
       <button type="button" onClick={() => setPrivateKey(generatePrivateKey())}>
         Generate random private key
       </button>
-      <label>Private key (0x + 64 hex chars)</label>
-      <input
+      <CopyInput
+        label="Private key (0x + 64 hex chars)"
         value={privateKey}
-        onChange={(e) => setPrivateKey(e.target.value)}
+        onChange={setPrivateKey}
         placeholder="0x…"
-        spellCheck={false}
       />
       {privateKey && !derived && <p className="error">Invalid private key.</p>}
-      <CopyField label="Private key" value={derived ? privateKey.trim() : ''} />
       <CopyField label="Public key (uncompressed)" value={derived?.publicKey ?? ''} />
       <CopyField label="Address" value={derived?.address ?? ''} />
     </Section>

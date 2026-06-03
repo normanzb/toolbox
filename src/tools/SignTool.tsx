@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { privateKeyToAccount, sign } from 'viem/accounts'
 import CopyField from '../components/CopyField'
+import CopyInput from '../components/CopyInput'
 import Section from '../components/Section'
 
 type Mode = 'message' | 'hash'
@@ -38,13 +39,7 @@ export default function SignTool() {
       title="Sign"
       description="Sign with a private key. Message mode uses EIP-191 personal_sign; raw mode signs a 32-byte hash directly."
     >
-      <label>Private key</label>
-      <input
-        value={privateKey}
-        onChange={(e) => setPrivateKey(e.target.value)}
-        placeholder="0x…"
-        spellCheck={false}
-      />
+      <CopyInput label="Private key" value={privateKey} onChange={setPrivateKey} placeholder="0x…" />
       <label>Mode</label>
       <select value={mode} onChange={(e) => setMode(e.target.value as Mode)}>
         <option value="message">Personal message (EIP-191)</option>
