@@ -29,7 +29,7 @@ type Result = {
 
 /** Resolves a proxy's EIP-1967 storage slots (implementation, beacon, admin) via JSON-RPC. */
 export default function Eip1967Tool() {
-  const { settings } = useSettings()
+  const { chain, rpcUrl } = useSettings()
   const [proxy, setProxy] = useState('')
   const [result, setResult] = useState<Result | null>(null)
   const [error, setError] = useState('')
@@ -44,7 +44,7 @@ export default function Eip1967Tool() {
     }
     setLoading(true)
     try {
-      const client = createPublicClient({ transport: http(settings.rpcUrl.trim()) })
+      const client = createPublicClient({ transport: http(rpcUrl.trim()) })
       const address = getAddress(proxy.trim())
       const [implementation, beacon, admin] = await Promise.all([
         client.getStorageAt({ address, slot: SLOTS.implementation }),
@@ -85,10 +85,10 @@ export default function Eip1967Tool() {
         placeholder="0x…"
         spellCheck={false}
       />
-      <button type="button" onClick={resolve} disabled={loading || !settings.rpcUrl || !proxy}>
-        {loading ? 'Resolving…' : 'Resolve'}
+      <button type="button" onClick={resolve} disabled={loading || !rpcUrl || !proxy}>
+        {loading ? 'Resolving…' : `Resolve on ${chain.name}`}
       </button>
-      {!settings.rpcUrl && <p className="error">Set an RPC URL in Settings first.</p>}
+      {!rpcUrl && <p className="error">Set an RPC URL in Settings first.</p>}
       {error && <p className="error">{error}</p>}
       {result && (
         <>
