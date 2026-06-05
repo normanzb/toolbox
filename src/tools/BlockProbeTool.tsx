@@ -48,7 +48,8 @@ export default function BlockProbeTool() {
         method: 'eth_getBlockByNumber',
         params: [numberToHex(BigInt(input)), false],
       })
-      setResult(block === null ? { kind: 'null' } : { kind: 'block', block })
+      // Some nodes omit `result` instead of returning null — treat both as null.
+      setResult(block == null ? { kind: 'null' } : { kind: 'block', block })
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
     } finally {

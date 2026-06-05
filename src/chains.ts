@@ -16,6 +16,7 @@ export const CHAINS: Chain[] = [
   { id: 56, name: 'BNB Smart Chain', rpcUrl: 'https://bsc-rpc.publicnode.com' },
   { id: 1, name: 'Ethereum', rpcUrl: 'https://ethereum-rpc.publicnode.com' },
   { id: 100, name: 'Gnosis', rpcUrl: 'https://gnosis-rpc.publicnode.com' },
+  { id: 1776, name: 'Injective EVM', rpcUrl: 'https://sentry.evm-rpc.injective.network' },
   { id: 59144, name: 'Linea', rpcUrl: 'https://linea-rpc.publicnode.com' },
   { id: 10, name: 'OP Mainnet', rpcUrl: 'https://optimism-rpc.publicnode.com' },
   { id: 137, name: 'Polygon', rpcUrl: 'https://polygon-bor-rpc.publicnode.com' },
