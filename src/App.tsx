@@ -1,5 +1,6 @@
 import SettingsSection from './components/SettingsSection'
 import { SettingsProvider } from './settings'
+import BlockProbeTool from './tools/BlockProbeTool'
 import Eip1967Tool from './tools/Eip1967Tool'
 import KeccakTool from './tools/KeccakTool'
 import KeyTool from './tools/KeyTool'
@@ -20,6 +21,7 @@ export default function App() {
         <SignTool />
         <KeccakTool />
         <Eip1967Tool />
+        <BlockProbeTool />
       </main>
     </SettingsProvider>
   )
