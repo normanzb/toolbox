@@ -6,7 +6,7 @@ import { useUrlParam } from '../urlState'
 
 /** Keccak-256 hasher with 4-byte selector output, e.g. keccak256("MintPaused()")[0:4]. */
 export default function KeccakTool() {
-  const [input, setInput] = useUrlParam('keccak', 'MintPaused()')
+  const [input, setInput] = useUrlParam('keccak')
 
   const result = useMemo(() => {
     if (!input) return null
