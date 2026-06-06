@@ -1,11 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { keccak256, stringToBytes } from 'viem'
 import CopyField from '../components/CopyField'
 import Section from '../components/Section'
+import { useUrlParam } from '../urlState'
 
 /** Keccak-256 hasher with 4-byte selector output, e.g. keccak256("MintPaused()")[0:4]. */
 export default function KeccakTool() {
-  const [input, setInput] = useState('MintPaused()')
+  const [input, setInput] = useUrlParam('keccak', 'MintPaused()')
 
   const result = useMemo(() => {
     if (!input) return null

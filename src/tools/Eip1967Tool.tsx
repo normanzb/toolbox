@@ -10,6 +10,7 @@ import {
 import CopyField from '../components/CopyField'
 import Section from '../components/Section'
 import { useSettings } from '../settings'
+import { useUrlParam } from '../urlState'
 
 const SLOTS = {
   // bytes32(uint256(keccak256('eip1967.proxy.implementation')) - 1)
@@ -30,7 +31,7 @@ type Result = {
 /** Resolves a proxy's EIP-1967 storage slots (implementation, beacon, admin) via JSON-RPC. */
 export default function Eip1967Tool() {
   const { chain, rpcUrl } = useSettings()
-  const [proxy, setProxy] = useState('')
+  const [proxy, setProxy] = useUrlParam('proxy')
   const [result, setResult] = useState<Result | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)

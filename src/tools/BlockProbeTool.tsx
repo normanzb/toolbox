@@ -3,6 +3,7 @@ import { createPublicClient, formatGwei, hexToBigInt, http, numberToHex, type He
 import CopyField from '../components/CopyField'
 import Section from '../components/Section'
 import { useSettings } from '../settings'
+import { useUrlParam } from '../urlState'
 
 /** Raw `eth_getBlockByNumber` response fields we display. */
 type RawBlock = {
@@ -24,7 +25,7 @@ type ProbeResult =
 /** Probes the RPC with `eth_getBlockByNumber` for a given block number and shows the raw result. */
 export default function BlockProbeTool() {
   const { chain, rpcUrl } = useSettings()
-  const [blockNumber, setBlockNumber] = useState('')
+  const [blockNumber, setBlockNumber] = useUrlParam('block')
   const [result, setResult] = useState<ProbeResult | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)

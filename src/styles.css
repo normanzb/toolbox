@@ -35,6 +35,21 @@ body {
   margin-bottom: 2rem;
 }
 
+.share-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.share-row button {
+  margin-top: 0;
+}
+
+.share-row .error {
+  margin-top: 0;
+}
+
 .section {
   background: var(--panel);
   border: 1px solid var(--border);

@@ -6,6 +6,7 @@ import {
   type PropsWithChildren,
 } from 'react'
 import { CHAINS, type Chain } from './chains'
+import { readUrlParam, writeUrlParam } from './urlState'
 
 const STORAGE_KEY = 'toolbox.settings'
 
@@ -44,6 +45,11 @@ export function SettingsProvider({ children }: PropsWithChildren) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings))
   }, [settings])
 
+  // Keep the active chain in the URL so links are shareable. RPC URLs stay local.
+  useEffect(() => {
+    writeUrlParam('chain', String(settings.chainId))
+  }, [settings.chainId])
+
   const update = (patch: Partial<Settings>) =>
     setSettings((current) => ({ ...current, ...patch }))
 
@@ -78,15 +84,21 @@ export function useSettings() {
 }
 
 function loadSettings(): Settings {
+  let stored: Partial<Settings> = {}
   try {
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}')
-    return {
-      chainId: CHAINS.some((c) => c.id === stored.chainId)
-        ? stored.chainId
-        : defaultSettings.chainId,
-      rpcUrls: { ...defaultSettings.rpcUrls, ...stored.rpcUrls },
-    }
+    stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}') ?? {}
   } catch {
-    return defaultSettings
+    // Ignore corrupt storage.
+  }
+  // The chain in a shared URL wins over the locally stored one.
+  const urlChainId = Number(readUrlParam('chain'))
+  const chainId = CHAINS.some((c) => c.id === urlChainId)
+    ? urlChainId
+    : CHAINS.some((c) => c.id === stored.chainId)
+      ? (stored.chainId as number)
+      : defaultSettings.chainId
+  return {
+    chainId,
+    rpcUrls: { ...defaultSettings.rpcUrls, ...stored.rpcUrls },
   }
 }

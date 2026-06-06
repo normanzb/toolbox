@@ -3,14 +3,16 @@ import { privateKeyToAccount, sign } from 'viem/accounts'
 import CopyField from '../components/CopyField'
 import CopyInput from '../components/CopyInput'
 import Section from '../components/Section'
+import { useUrlParam } from '../urlState'
 
 type Mode = 'message' | 'hash'
 
 /** Signs an EIP-191 personal message or a raw 32-byte hash with a private key. */
 export default function SignTool() {
-  const [privateKey, setPrivateKey] = useState('')
-  const [mode, setMode] = useState<Mode>('message')
-  const [payload, setPayload] = useState('')
+  const [privateKey, setPrivateKey] = useUrlParam('sign-pk')
+  const [rawMode, setMode] = useUrlParam('sign-mode', 'message')
+  const [payload, setPayload] = useUrlParam('sign-msg')
+  const mode: Mode = rawMode === 'hash' ? 'hash' : 'message'
   const [signature, setSignature] = useState('')
   const [error, setError] = useState('')
 
@@ -41,7 +43,7 @@ export default function SignTool() {
     >
       <CopyInput label="Private key" value={privateKey} onChange={setPrivateKey} placeholder="0x…" />
       <label>Mode</label>
-      <select value={mode} onChange={(e) => setMode(e.target.value as Mode)}>
+      <select value={mode} onChange={(e) => setMode(e.target.value)}>
         <option value="message">Personal message (EIP-191)</option>
         <option value="hash">Raw 32-byte hash</option>
       </select>

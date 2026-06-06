@@ -1,12 +1,13 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
 import CopyField from '../components/CopyField'
 import CopyInput from '../components/CopyInput'
 import Section from '../components/Section'
+import { useUrlParam } from '../urlState'
 
 /** Generates a random private key, or derives public key + address from a pasted one. */
 export default function KeyTool() {
-  const [privateKey, setPrivateKey] = useState('')
+  const [privateKey, setPrivateKey] = useUrlParam('pk')
 
   const derived = useMemo(() => {
     if (!/^0x[0-9a-fA-F]{64}$/.test(privateKey.trim())) return null

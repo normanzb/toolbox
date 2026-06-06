@@ -1,4 +1,5 @@
 import SettingsSection from './components/SettingsSection'
+import ShareButton from './components/ShareButton'
 import { SettingsProvider } from './settings'
 import BlockProbeTool from './tools/BlockProbeTool'
 import Eip1967Tool from './tools/Eip1967Tool'
@@ -14,8 +15,10 @@ export default function App() {
         <h1>Ethereum Toolbox</h1>
         <p>
           Common Ethereum dev utilities. Keys never leave your browser — but don't paste private
-          keys that hold real funds.
+          keys that hold real funds. Tool inputs are reflected in the URL (RPC URLs are not), so
+          you can share your setup as a link.
         </p>
+        <ShareButton />
         <SettingsSection />
         <KeyTool />
         <SignTool />
