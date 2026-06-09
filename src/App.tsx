@@ -2,6 +2,7 @@ import SettingsSection from './components/SettingsSection'
 import ShareButton from './components/ShareButton'
 import { SettingsProvider } from './settings'
 import BlockProbeTool from './tools/BlockProbeTool'
+import CalldataTool from './tools/CalldataTool'
 import Eip1967Tool from './tools/Eip1967Tool'
 import KeccakTool from './tools/KeccakTool'
 import KeyTool from './tools/KeyTool'
@@ -24,6 +25,7 @@ export default function App() {
         <KeyTool />
         <SignTool />
         <KeccakTool />
+        <CalldataTool />
         <TimestampTool />
         <Eip1967Tool />
         <BlockProbeTool />
