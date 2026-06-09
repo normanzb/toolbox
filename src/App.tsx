@@ -6,6 +6,7 @@ import Eip1967Tool from './tools/Eip1967Tool'
 import KeccakTool from './tools/KeccakTool'
 import KeyTool from './tools/KeyTool'
 import SignTool from './tools/SignTool'
+import TimestampTool from './tools/TimestampTool'
 
 /** Ethereum developer toolbox — all tools run client-side. */
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
         <KeyTool />
         <SignTool />
         <KeccakTool />
+        <TimestampTool />
         <Eip1967Tool />
         <BlockProbeTool />
       </main>
