@@ -22,15 +22,19 @@ export default function App() {
           you can share your setup as a link.
         </p>
         <ShareButton />
-        <SettingsSection />
-        <KeyTool />
-        <SignTool />
-        <KeccakTool />
-        <CalldataTool />
-        <TimestampTool />
-        <Eip1967Tool />
-        <ContractCallTool />
-        <BlockProbeTool />
+        <div className="priority">
+          <SettingsSection />
+          <KeyTool />
+        </div>
+        <div className="masonry">
+          <SignTool />
+          <KeccakTool />
+          <CalldataTool />
+          <TimestampTool />
+          <Eip1967Tool />
+          <ContractCallTool />
+          <BlockProbeTool />
+        </div>
       </main>
     </SettingsProvider>
   )

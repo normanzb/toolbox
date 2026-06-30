@@ -2,11 +2,13 @@
   color-scheme: dark;
   --bg: #0d1117;
   --panel: #161b22;
+  --panel-accent: #15243b;
   --border: #30363d;
   --text: #e6edf3;
   --muted: #8b949e;
   --accent: #58a6ff;
   --error: #f85149;
+  --gap: 1.25rem;
   font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
@@ -21,7 +23,7 @@ body {
 }
 
 .app {
-  max-width: 860px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem 4rem;
 }
@@ -50,12 +52,39 @@ body {
   margin-top: 0;
 }
 
+.priority {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--gap);
+  margin-bottom: var(--gap);
+}
+
+/* The two highest-priority cards: tinted background + accent border. */
+.priority .section {
+  margin: 0;
+  background: var(--panel-accent);
+  border-color: var(--accent);
+}
+
+/* Masonry: cards flow into as many columns as fit, packing each column
+   tightly top-to-bottom (column-major order). */
+.masonry {
+  column-width: 360px;
+  column-gap: var(--gap);
+}
+
+.masonry > .section {
+  margin: 0 0 var(--gap);
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+}
+
 .section {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem 1.25rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--gap);
 }
 
 .section > h2 {
