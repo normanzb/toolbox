@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { type Abi, decodeFunctionData, parseAbi } from 'viem'
+import { type Abi, decodeFunctionData } from 'viem'
+import { bigintReplacer, parseAbiInput } from '../abi'
 import CopyField from '../components/CopyField'
 import Section from '../components/Section'
 import { useUrlParam } from '../urlState'
@@ -75,22 +76,4 @@ export default function CalldataTool() {
       )}
     </Section>
   )
-}
-
-/** Parses ABI input as JSON when it looks like JSON, otherwise as human-readable signatures. */
-function parseAbiInput(input: string): Abi {
-  if (input.startsWith('[') || input.startsWith('{')) {
-    const json = JSON.parse(input)
-    return (Array.isArray(json) ? json : [json]) as Abi
-  }
-  const lines = input
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
-  return parseAbi(lines)
-}
-
-/** JSON.stringify replacer that renders bigints as decimal strings. */
-function bigintReplacer(_key: string, value: unknown): unknown {
-  return typeof value === 'bigint' ? value.toString() : value
 }

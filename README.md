@@ -8,8 +8,9 @@ A client-side Ethereum developer toolbox built with React + Vite + [viem](https:
 - **Sign** — sign an EIP-191 personal message or a raw 32-byte hash
 - **Keccak-256** — hash text or hex bytes; shows the 4-byte selector, e.g. `keccak256("MintPaused()")[0:4] = 0xd7d248ba`
 - **EIP-1967 proxy resolver** — read a proxy's implementation, beacon, and admin slots via any CORS-enabled JSON-RPC endpoint
+- **Contract caller** — read or write any contract function: paste an address + ABI and fill typed argument fields, or pick a preset (grant/revoke/check the `APPROVED_SWAPPER` role). Writes are signed by an injected wallet or a pasted private key
 
-All cryptography runs locally in the browser. Still, don't paste private keys that hold real funds.
+All cryptography runs locally in the browser. Still, don't paste private keys that hold real funds — the contract caller's write path can use an admin key, so prefer the injected wallet.
 
 ## Development
 
