@@ -1,7 +1,7 @@
+import NavBar from './components/NavBar'
 import SettingsSection from './components/SettingsSection'
 import ShareButton from './components/ShareButton'
 import { SettingsProvider } from './settings'
-import AuthenticatorMigrationTool from './tools/AuthenticatorMigrationTool'
 import BlockProbeTool from './tools/BlockProbeTool'
 import CalldataTool from './tools/CalldataTool'
 import ContractCallTool from './tools/ContractCallTool'
@@ -15,6 +15,7 @@ import TimestampTool from './tools/TimestampTool'
 export default function App() {
   return (
     <SettingsProvider>
+      <NavBar current="ethereum" />
       <main className="app">
         <h1>Ethereum Toolbox</h1>
         <p>
@@ -35,10 +36,6 @@ export default function App() {
           <Eip1967Tool />
           <ContractCallTool />
           <BlockProbeTool />
-        </div>
-        <h1>2FA Toolbox</h1>
-        <div className="masonry">
-          <AuthenticatorMigrationTool />
         </div>
       </main>
     </SettingsProvider>
