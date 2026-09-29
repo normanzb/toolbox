@@ -10,6 +10,10 @@ A client-side Ethereum developer toolbox built with React + Vite + [viem](https:
 - **EIP-1967 proxy resolver** — read a proxy's implementation, beacon, and admin slots via any CORS-enabled JSON-RPC endpoint
 - **Contract caller** — read or write any contract function: paste an address + ABI and fill typed argument fields, or pick a preset (grant/revoke/check the `APPROVED_SWAPPER` role). Writes are signed by an injected wallet or a pasted private key
 
+### 2FA Toolbox
+
+- **Authenticator export decoder** — paste a Google Authenticator export URL (`otpauth-migration://offline?data=…`) to get each account's base32 authenticator key
+
 All cryptography runs locally in the browser. Still, don't paste private keys that hold real funds — the contract caller's write path can use an admin key, so prefer the injected wallet.
 
 ## Development
