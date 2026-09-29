@@ -15,16 +15,18 @@ export default function NavBar({ current }: NavBarProps) {
 
   return (
     <nav className="navbar">
-      {links.map((l) => (
-        <a
-          key={l.id}
-          href={l.href}
-          className={l.id === current ? 'active' : undefined}
-          aria-current={l.id === current ? 'page' : undefined}
-        >
-          {l.label}
-        </a>
-      ))}
+      <div className="navbar-inner">
+        {links.map((l) => (
+          <a
+            key={l.id}
+            href={l.href}
+            className={l.id === current ? 'active' : undefined}
+            aria-current={l.id === current ? 'page' : undefined}
+          >
+            {l.label}
+          </a>
+        ))}
+      </div>
     </nav>
   )
 }

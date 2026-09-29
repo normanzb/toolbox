@@ -21,7 +21,8 @@ export default function App() {
         <p>
           Common Ethereum dev utilities. Keys never leave your browser — but don't paste private
           keys that hold real funds. Tool inputs are reflected in the URL (RPC URLs are not), so
-          you can share your setup as a link.
+          you can share your setup as a link; private keys are left out of share links unless you
+          opt in.
         </p>
         <ShareButton />
         <div className="priority">

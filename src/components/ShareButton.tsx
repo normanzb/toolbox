@@ -1,20 +1,21 @@
 import { useState } from 'react'
-import { readUrlParam } from '../urlState'
+import { hasSecrets, shareUrl } from '../urlState'
 
 /** Copies (and natively shares, where supported) the current URL, which encodes all tool inputs. */
 export default function ShareButton() {
   const [copied, setCopied] = useState(false)
-  const [hasKey, setHasKey] = useState(false)
+  const [includeKeys, setIncludeKeys] = useState(false)
+  const [sharedKey, setSharedKey] = useState(false)
 
   const copy = async () => {
-    await navigator.clipboard.writeText(window.location.href)
-    setHasKey(Boolean(readUrlParam('pk') || readUrlParam('sign-pk')))
+    await navigator.clipboard.writeText(shareUrl(includeKeys))
+    setSharedKey(includeKeys && hasSecrets())
     setCopied(true)
     setTimeout(() => setCopied(false), 1500)
   }
 
   const share = () =>
-    navigator.share({ title: document.title, url: window.location.href }).catch(() => {})
+    navigator.share({ title: document.title, url: shareUrl(includeKeys) }).catch(() => {})
 
   return (
     <div className="share-row">
@@ -26,7 +27,15 @@ export default function ShareButton() {
           Share…
         </button>
       )}
-      {copied && hasKey && (
+      <label className="share-toggle">
+        <input
+          type="checkbox"
+          checked={includeKeys}
+          onChange={(e) => setIncludeKeys(e.target.checked)}
+        />
+        Include private keys
+      </label>
+      {copied && sharedKey && (
         <span className="error">Heads up: this link contains a private key.</span>
       )}
     </div>

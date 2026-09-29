@@ -43,3 +43,21 @@ export function useUrlParam(key: string, defaultValue = ''): [string, (value: st
 
   return [value, set]
 }
+
+/** Params holding private keys; dropped from share links unless the user opts in. */
+const SECRET_PARAMS = ['pk', 'sign-pk']
+
+/** Whether any secret param currently has a value. */
+export function hasSecrets(): boolean {
+  return SECRET_PARAMS.some((key) => readUrlParam(key))
+}
+
+/** Current URL, with secret params stripped unless `includeSecrets` is set. */
+export function shareUrl(includeSecrets: boolean): string {
+  if (includeSecrets) return window.location.href
+  const params = readParams()
+  for (const key of SECRET_PARAMS) params.delete(key)
+  const url = new URL(window.location.href)
+  url.hash = params.toString()
+  return url.toString()
+}

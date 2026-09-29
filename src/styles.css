@@ -48,6 +48,19 @@ body {
   margin-top: 0;
 }
 
+.share-row .share-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  cursor: pointer;
+}
+
+.share-row .share-toggle input {
+  width: auto;
+  margin: 0;
+}
+
 .share-row .error {
   margin-top: 0;
 }
@@ -178,11 +191,17 @@ button:hover {
 }
 
 .navbar {
-  display: flex;
-  gap: 0.25rem;
-  padding: 0.6rem 1rem;
   background: var(--panel);
   border-bottom: 1px solid var(--border);
+}
+
+/* Same width and gutter as .app so the links line up with the page content. */
+.navbar-inner {
+  display: flex;
+  gap: 0.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.6rem 1rem;
 }
 
 .navbar a {
