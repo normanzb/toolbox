@@ -1,15 +1,20 @@
 :root {
-  color-scheme: dark;
-  --bg: #0d1117;
-  --panel: #161b22;
-  --panel-accent: #15243b;
-  --border: #30363d;
-  --text: #e6edf3;
-  --muted: #8b949e;
-  --accent: #58a6ff;
-  --error: #f85149;
+  /* Palette follows blog.norm.im: grey page, white cards, black text, one blue accent, Nord code. */
+  color-scheme: light;
+  --bg: #efefef;
+  --panel: #fff;
+  --panel-accent: #f3f9fd;
+  --field: #f7f7f7;
+  --button: #fff;
+  --border: #e1e1e1;
+  --text: #000;
+  --muted: #777;
+  --accent: #039be5;
+  --error: #d32f2f;
+  --code-bg: #2e3440;
+  --code-text: #d8dee9;
   --gap: 1.25rem;
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: 'Roboto', ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 * {
@@ -122,7 +127,7 @@ input,
 textarea,
 select {
   width: 100%;
-  background: var(--bg);
+  background: var(--field);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -138,7 +143,7 @@ select:focus {
 }
 
 button {
-  background: #21262d;
+  background: var(--button);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -169,7 +174,7 @@ button:hover {
 .copy-field code {
   flex: 1;
   display: block;
-  background: var(--bg);
+  background: var(--field);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.5rem 0.6rem;
@@ -250,8 +255,9 @@ button:hover {
 .cmd pre {
   flex: 1;
   margin: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: var(--code-bg);
+  color: var(--code-text);
+  border: 1px solid var(--code-bg);
   border-radius: 6px;
   padding: 0.5rem 0.6rem;
   font-size: 0.8rem;
