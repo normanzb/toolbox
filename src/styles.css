@@ -178,6 +178,13 @@ button:hover {
   min-height: 2.1rem;
 }
 
+.copy-field code.single-line {
+  min-width: 0;
+  white-space: nowrap;
+  overflow-x: auto;
+  word-break: normal;
+}
+
 .copy-field .copy-row button {
   margin-top: 0;
   flex-shrink: 0;
@@ -224,4 +231,41 @@ button:hover {
 .totp-countdown {
   color: var(--muted);
   font-size: 0.85rem;
+}
+
+.cheatsheet-filter {
+  margin-bottom: var(--gap);
+}
+
+.cmd {
+  margin-top: 0.75rem;
+}
+
+.cmd .copy-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.cmd pre {
+  flex: 1;
+  margin: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.cmd .copy-row button {
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+.cmd-note {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin: 0.3rem 0 0;
 }

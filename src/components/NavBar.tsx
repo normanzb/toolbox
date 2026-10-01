@@ -1,7 +1,7 @@
 /** Props for {@link NavBar}. */
 type NavBarProps = {
   /** Page being rendered; its link is highlighted. */
-  current: 'ethereum' | '2fa'
+  current: 'ethereum' | '2fa' | 'cheatsheet'
 }
 
 /** Top navigation between the toolbox pages. */
@@ -11,6 +11,7 @@ export default function NavBar({ current }: NavBarProps) {
   const links = [
     { id: 'ethereum', label: 'Ethereum', href: root },
     { id: '2fa', label: '2FA', href: `${root}2fa/` },
+    { id: 'cheatsheet', label: 'Foundry cheatsheet', href: `${root}cheatsheet/` },
   ] as const
 
   return (

@@ -6,10 +6,12 @@ type CopyFieldProps = {
   label: string
   /** Value to display and copy; empty renders a placeholder. */
   value: string
+  /** Scroll long values sideways instead of wrapping, so the height never changes. */
+  singleLine?: boolean
 }
 
 /** Read-only output field with a copy-to-clipboard button. */
-export default function CopyField({ label, value }: CopyFieldProps) {
+export default function CopyField({ label, value, singleLine }: CopyFieldProps) {
   const [copied, setCopied] = useState(false)
 
   const copy = async () => {
@@ -22,7 +24,7 @@ export default function CopyField({ label, value }: CopyFieldProps) {
     <div className="copy-field">
       <label>{label}</label>
       <div className="copy-row">
-        <code>{value || '—'}</code>
+        <code className={singleLine ? 'single-line' : undefined}>{value || '—'}</code>
         <button type="button" onClick={copy} disabled={!value}>
           {copied ? 'Copied' : 'Copy'}
         </button>

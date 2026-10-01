@@ -8,6 +8,7 @@ import ContractCallTool from './tools/ContractCallTool'
 import Eip1967Tool from './tools/Eip1967Tool'
 import KeccakTool from './tools/KeccakTool'
 import KeyTool from './tools/KeyTool'
+import RpcInfoTool from './tools/RpcInfoTool'
 import SignTool from './tools/SignTool'
 import TimestampTool from './tools/TimestampTool'
 
@@ -37,6 +38,7 @@ export default function App() {
           <Eip1967Tool />
           <ContractCallTool />
           <BlockProbeTool />
+          <RpcInfoTool />
         </div>
       </main>
     </SettingsProvider>

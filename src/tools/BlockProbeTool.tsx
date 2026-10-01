@@ -80,35 +80,40 @@ export default function BlockProbeTool() {
           RPC returned <code>null</code> — the block doesn't exist yet or this node has pruned it.
         </p>
       )}
-      {result?.kind === 'block' && <BlockFields block={result.block} />}
+      <BlockFields block={result?.kind === 'block' ? result.block : null} />
     </Section>
   )
 }
 
 /** Props for {@link BlockFields}. */
 type BlockFieldsProps = {
-  /** Raw block returned by the RPC. */
-  block: RawBlock
+  /** Raw block returned by the RPC; null renders the fields empty. */
+  block: RawBlock | null
 }
 
-/** Formats and renders the fields of a raw block. */
+/** Formats and renders the fields of a raw block. Always rendered so the card height stays stable. */
 function BlockFields({ block }: BlockFieldsProps) {
+  const show = (format: (b: RawBlock) => string) => (block ? format(block) : '')
   return (
     <>
-      <CopyField label="Number" value={hexToBigInt(block.number).toString()} />
-      <CopyField label="Hash" value={block.hash ?? '(pending — no hash yet)'} />
-      <CopyField label="Parent hash" value={block.parentHash} />
-      <CopyField label="Timestamp" value={formatTimestamp(block.timestamp)} />
-      <CopyField label="Miner" value={block.miner} />
+      <CopyField singleLine label="Number" value={show((b) => hexToBigInt(b.number).toString())} />
+      <CopyField singleLine label="Hash" value={show((b) => b.hash ?? '(pending — no hash yet)')} />
+      <CopyField singleLine label="Parent hash" value={show((b) => b.parentHash)} />
+      <CopyField singleLine label="Timestamp" value={show((b) => formatTimestamp(b.timestamp))} />
+      <CopyField singleLine label="Miner" value={show((b) => b.miner)} />
       <CopyField
+        singleLine
         label="Gas used / limit"
-        value={`${hexToBigInt(block.gasUsed).toString()} / ${hexToBigInt(block.gasLimit).toString()}`}
+        value={show((b) => `${hexToBigInt(b.gasUsed).toString()} / ${hexToBigInt(b.gasLimit).toString()}`)}
       />
       <CopyField
+        singleLine
         label="Base fee"
-        value={block.baseFeePerGas ? `${formatGwei(hexToBigInt(block.baseFeePerGas))} gwei` : '(pre-EIP-1559)'}
+        value={show((b) =>
+          b.baseFeePerGas ? `${formatGwei(hexToBigInt(b.baseFeePerGas))} gwei` : '(pre-EIP-1559)',
+        )}
       />
-      <CopyField label="Transactions" value={block.transactions.length.toString()} />
+      <CopyField singleLine label="Transactions" value={show((b) => b.transactions.length.toString())} />
     </>
   )
 }
