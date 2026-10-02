@@ -6,7 +6,7 @@ import {
   type PropsWithChildren,
 } from 'react'
 import { CHAINS, type Chain } from './chains'
-import { readUrlParam, writeUrlParam } from './urlState'
+import { readUrlParam, useUrlParam, writeUrlParam } from './urlState'
 
 const STORAGE_KEY = 'toolbox.settings'
 
@@ -28,6 +28,9 @@ type SettingsContextValue = {
   update: (patch: Partial<Settings>) => void
   /** Sets the RPC URL for one chain. */
   setRpcUrl: (chainId: number, url: string) => void
+  /** Shared private key used by every tool that signs; URL-synced, never persisted. */
+  privateKey: string
+  setPrivateKey: (privateKey: string) => void
 }
 
 const defaultSettings: Settings = {
@@ -40,6 +43,7 @@ const SettingsContext = createContext<SettingsContextValue | null>(null)
 /** Provides global settings, persisted to localStorage. */
 export function SettingsProvider({ children }: PropsWithChildren) {
   const [settings, setSettings] = useState<Settings>(loadSettings)
+  const [privateKey, setPrivateKey] = useUrlParam('pk')
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings))
@@ -69,6 +73,8 @@ export function SettingsProvider({ children }: PropsWithChildren) {
         rpcUrl: settings.rpcUrls[settings.chainId] ?? '',
         update,
         setRpcUrl,
+        privateKey,
+        setPrivateKey,
       }}
     >
       {children}

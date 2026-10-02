@@ -45,7 +45,7 @@ export function useUrlParam(key: string, defaultValue = ''): [string, (value: st
 }
 
 /** Params holding private keys; dropped from share links unless the user opts in. */
-const SECRET_PARAMS = ['pk', 'sign-pk']
+const SECRET_PARAMS = ['pk']
 
 /** Whether any secret param currently has a value. */
 export function hasSecrets(): boolean {

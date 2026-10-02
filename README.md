@@ -5,7 +5,7 @@ A client-side Ethereum developer toolbox built with React + Vite + [viem](https:
 ## Tools
 
 - **Private key / public key / address** — generate a random private key, or paste one to derive its uncompressed public key and address
-- **Sign** — sign an EIP-191 personal message or a raw 32-byte hash
+- **Sign** — sign an EIP-191 personal message or a raw 32-byte hash with the key from the private key card
 - **Keccak-256** — hash text or hex bytes; shows the 4-byte selector, e.g. `keccak256("MintPaused()")[0:4] = 0xd7d248ba`
 - **EIP-1967 proxy resolver** — read a proxy's implementation, beacon, and admin slots via any CORS-enabled JSON-RPC endpoint
 - **Contract caller** — read or write any contract function: paste an address + ABI and fill typed argument fields, or pick a preset (grant/revoke/check the `APPROVED_SWAPPER` role). Writes are signed by an injected wallet or a pasted private key

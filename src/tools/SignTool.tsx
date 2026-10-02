@@ -1,20 +1,28 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { privateKeyToAccount, sign } from 'viem/accounts'
 import CopyField from '../components/CopyField'
-import CopyInput from '../components/CopyInput'
 import Section from '../components/Section'
+import { useSettings } from '../settings'
 import { useUrlParam } from '../urlState'
 
 type Mode = 'message' | 'hash'
 
-/** Signs an EIP-191 personal message or a raw 32-byte hash with a private key. */
+/** Signs an EIP-191 personal message or a raw 32-byte hash with the shared private key. */
 export default function SignTool() {
-  const [privateKey, setPrivateKey] = useUrlParam('sign-pk')
+  const { privateKey } = useSettings()
   const [rawMode, setMode] = useUrlParam('sign-mode', 'message')
   const [payload, setPayload] = useUrlParam('sign-msg')
   const mode: Mode = rawMode === 'hash' ? 'hash' : 'message'
   const [signature, setSignature] = useState('')
   const [error, setError] = useState('')
+
+  const signer = useMemo(() => {
+    try {
+      return privateKeyToAccount(privateKey.trim() as `0x${string}`).address
+    } catch {
+      return ''
+    }
+  }, [privateKey])
 
   const doSign = async () => {
     setError('')
@@ -39,9 +47,9 @@ export default function SignTool() {
   return (
     <Section
       title="Sign"
-      description="Sign with a private key. Message mode uses EIP-191 personal_sign; raw mode signs a 32-byte hash directly."
+      description="Sign with the private key from the key card. Message mode uses EIP-191 personal_sign; raw mode signs a 32-byte hash directly."
     >
-      <CopyInput label="Private key" value={privateKey} onChange={setPrivateKey} placeholder="0x…" />
+      <CopyField label="Signer address" value={signer} />
       <label>Mode</label>
       <select value={mode} onChange={(e) => setMode(e.target.value)}>
         <option value="message">Personal message (EIP-191)</option>
@@ -55,9 +63,10 @@ export default function SignTool() {
         placeholder={mode === 'message' ? 'hello world' : '0x…'}
         spellCheck={false}
       />
-      <button type="button" onClick={doSign}>
+      <button type="button" onClick={doSign} disabled={!signer}>
         Sign
       </button>
+      {!signer && <p className="error">Set a valid private key in the key card first.</p>}
       {error && <p className="error">{error}</p>}
       <CopyField label="Signature" value={signature} />
     </Section>
