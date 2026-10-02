@@ -3,10 +3,10 @@
   color-scheme: light;
   --bg: #efefef;
   --panel: #fff;
-  --panel-accent: #f3f9fd;
+  --panel-accent: #e6f4fb;
   --field: #f7f7f7;
-  --button: #fff;
-  --border: #e1e1e1;
+  --button: #ebebeb;
+  --glow: 0 0 0 2px rgba(3, 155, 229, 0.35), 0 0 12px rgba(3, 155, 229, 0.45);
   --text: #000;
   --muted: #777;
   --accent: #039be5;
@@ -77,11 +77,15 @@ body {
   margin-bottom: var(--gap);
 }
 
-/* The two highest-priority cards: tinted background + accent border. */
+/* The two highest-priority cards: tinted background. */
 .priority .section {
   margin: 0;
   background: var(--panel-accent);
-  border-color: var(--accent);
+}
+
+/* Grey fields vanish on the tint without borders; white keeps them visible. */
+.priority :is(input, textarea, select, .copy-field code) {
+  background: var(--panel);
 }
 
 /* Masonry: cards flow into as many columns as fit, packing each column
@@ -99,7 +103,6 @@ body {
 
 .section {
   background: var(--panel);
-  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem 1.25rem;
   margin-bottom: var(--gap);
@@ -129,7 +132,7 @@ select {
   width: 100%;
   background: var(--field);
   color: var(--text);
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 6px;
   padding: 0.5rem 0.6rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -139,22 +142,41 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-  outline: 1px solid var(--accent);
+  /* Outline, not border: it takes no space, so focusing doesn't shift layout. */
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
 }
 
 button {
   background: var(--button);
   color: var(--text);
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 6px;
   padding: 0.45rem 0.9rem;
   font-size: 0.85rem;
   cursor: pointer;
   margin-top: 0.75rem;
+  transition:
+    box-shadow 0.2s ease,
+    color 0.2s ease;
 }
 
-button:hover {
-  border-color: var(--accent);
+button:hover:not(:disabled),
+button:focus-visible {
+  outline: none;
+  color: var(--accent);
+  box-shadow: var(--glow);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button {
+    transition: none;
+  }
 }
 
 .copy-field {
@@ -175,7 +197,6 @@ button:hover {
   flex: 1;
   display: block;
   background: var(--field);
-  border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.5rem 0.6rem;
   font-size: 0.8rem;
@@ -204,7 +225,6 @@ button:hover {
 
 .navbar {
   background: var(--panel);
-  border-bottom: 1px solid var(--border);
 }
 
 /* Same width and gutter as .app so the links line up with the page content. */
@@ -257,7 +277,6 @@ button:hover {
   margin: 0;
   background: var(--code-bg);
   color: var(--code-text);
-  border: 1px solid var(--code-bg);
   border-radius: 6px;
   padding: 0.5rem 0.6rem;
   font-size: 0.8rem;
