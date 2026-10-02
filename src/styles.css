@@ -5,7 +5,7 @@
   --panel: #fff;
   --panel-accent: #e6f4fb;
   --field: #f7f7f7;
-  --button: #ebebeb;
+  --button: #dbdbdb;
   --glow: 0 0 1px 0 rgba(3, 155, 229, 0.35), 0 0 12px rgba(3, 155, 229, 0.45);
   --text: #000;
   --muted: #777;
@@ -169,10 +169,6 @@ button:hover:not(:disabled),
 button:focus-visible {
   outline: none;
   box-shadow: var(--glow);
-}
-
-button:active:not(:disabled) {
-  background: #dbdbdb;
 }
 
 button:disabled {
