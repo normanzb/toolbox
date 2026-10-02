@@ -6,7 +6,7 @@
   --panel-accent: #e6f4fb;
   --field: #f7f7f7;
   --button: #ebebeb;
-  --glow: 0 0 0 2px rgba(3, 155, 229, 0.35), 0 0 12px rgba(3, 155, 229, 0.45);
+  --glow: 0 0 1px 0 rgba(3, 155, 229, 0.35), 0 0 12px rgba(3, 155, 229, 0.45);
   --text: #000;
   --muted: #777;
   --accent: #039be5;
@@ -14,6 +14,7 @@
   --code-bg: #2e3440;
   --code-text: #d8dee9;
   --gap: 1.25rem;
+  --font-title: 'Space Grotesk', 'Roboto', ui-sans-serif, system-ui, sans-serif;
   font-family: 'Roboto', ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
@@ -34,7 +35,10 @@ body {
 }
 
 .app > h1 {
-  font-size: 1.5rem;
+  font-family: var(--font-title);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .app > p {
@@ -109,7 +113,9 @@ body {
 }
 
 .section > h2 {
-  font-size: 1.05rem;
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  font-weight: 500;
   margin: 0 0 0.25rem;
 }
 
@@ -137,14 +143,14 @@ select {
   padding: 0.5rem 0.6rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.85rem;
+  transition: box-shadow 0.2s ease;
 }
 
 input:focus,
 textarea:focus,
 select:focus {
-  /* Outline, not border: it takes no space, so focusing doesn't shift layout. */
-  outline: 2px solid var(--accent);
-  outline-offset: 0;
+  outline: none;
+  box-shadow: var(--glow);
 }
 
 button {
@@ -156,16 +162,17 @@ button {
   font-size: 0.85rem;
   cursor: pointer;
   margin-top: 0.75rem;
-  transition:
-    box-shadow 0.2s ease,
-    color 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
 button:hover:not(:disabled),
 button:focus-visible {
   outline: none;
-  color: var(--accent);
   box-shadow: var(--glow);
+}
+
+button:active:not(:disabled) {
+  background: #dbdbdb;
 }
 
 button:disabled {
@@ -174,7 +181,10 @@ button:disabled {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  button {
+  button,
+  input,
+  textarea,
+  select {
     transition: none;
   }
 }
