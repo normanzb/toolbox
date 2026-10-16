@@ -15,6 +15,8 @@ export default function SignTool() {
   const mode: Mode = rawMode === 'hash' ? 'hash' : 'message'
   const [signature, setSignature] = useState('')
   const [error, setError] = useState('')
+  // Missing-key hint waits for interaction so it doesn't greet every page load.
+  const [touched, setTouched] = useState(false)
 
   const signer = useMemo(() => {
     try {
@@ -25,6 +27,8 @@ export default function SignTool() {
   }, [privateKey])
 
   const doSign = async () => {
+    setTouched(true)
+    if (!signer) return
     setError('')
     setSignature('')
     try {
@@ -51,22 +55,31 @@ export default function SignTool() {
     >
       <CopyField label="Signer address" value={signer} />
       <label>Mode</label>
-      <select value={mode} onChange={(e) => setMode(e.target.value)}>
+      <select
+        value={mode}
+        onChange={(e) => {
+          setTouched(true)
+          setMode(e.target.value)
+        }}
+      >
         <option value="message">Personal message (EIP-191)</option>
         <option value="hash">Raw 32-byte hash</option>
       </select>
       <label>{mode === 'message' ? 'Message' : 'Hash (0x + 64 hex chars)'}</label>
       <textarea
         value={payload}
-        onChange={(e) => setPayload(e.target.value)}
+        onChange={(e) => {
+          setTouched(true)
+          setPayload(e.target.value)
+        }}
         rows={3}
         placeholder={mode === 'message' ? 'hello world' : '0x…'}
         spellCheck={false}
       />
-      <button type="button" onClick={doSign} disabled={!signer}>
+      <button type="button" onClick={doSign}>
         Sign
       </button>
-      {!signer && <p className="error">Set a valid private key in the key card first.</p>}
+      {touched && !signer && <p className="error">Set a valid private key in the key card first.</p>}
       {error && <p className="error">{error}</p>}
       <CopyField label="Signature" value={signature} />
     </Section>
