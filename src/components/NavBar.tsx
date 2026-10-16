@@ -17,6 +17,9 @@ export default function NavBar({ current }: NavBarProps) {
   return (
     <nav className="navbar">
       <div className="navbar-inner">
+        <a href={root} className="navbar-logo" aria-label="Toolbox home">
+          <img src={`${root}logo.png`} alt="" width={32} height={32} />
+        </a>
         {links.map((l) => (
           <a
             key={l.id}

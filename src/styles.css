@@ -236,10 +236,17 @@ button:disabled {
 /* Same width and gutter as .app so the links line up with the page content. */
 .navbar-inner {
   display: flex;
+  align-items: center;
   gap: 0.25rem;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0.6rem 1rem;
+}
+
+.navbar a.navbar-logo {
+  display: flex;
+  padding: 0;
+  margin-right: 0.5rem;
 }
 
 .navbar a {
