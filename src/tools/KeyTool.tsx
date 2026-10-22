@@ -1,3 +1,4 @@
+import { QRCodeSVG } from 'qrcode.react'
 import { useMemo } from 'react'
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
 import CopyField from '../components/CopyField'
@@ -36,6 +37,11 @@ export default function KeyTool() {
       {privateKey && !derived && <p className="error">Invalid private key.</p>}
       <CopyField label="Public key (uncompressed)" value={derived?.publicKey ?? ''} />
       <CopyField label="Address" value={derived?.address ?? ''} />
+      <label>Address QR code</label>
+      {/* Placeholder keeps the card height fixed before a key is entered. */}
+      <div className="qr">
+        {derived && <QRCodeSVG value={derived.address} size={160} marginSize={2} />}
+      </div>
     </Section>
   )
 }

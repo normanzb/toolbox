@@ -189,6 +189,18 @@ button:disabled {
   margin-top: 0.75rem;
 }
 
+.qr {
+  width: 160px;
+  height: 160px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--field);
+}
+
+.qr svg {
+  display: block;
+}
+
 .copy-field .copy-row {
   display: flex;
   gap: 0.5rem;
