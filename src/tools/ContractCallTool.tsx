@@ -42,7 +42,7 @@ type Output = {
 
 /**
  * Calls any contract function — read (eth_call) or write (signed tx) — against an
- * address + ABI, or via a built-in preset (grant/revoke/check APPROVED_SWAPPER).
+ * address + ABI, or via a built-in preset (grant/revoke/check APPROVED_SWAPPER on AgoraStableSwapPair).
  */
 export default function ContractCallTool() {
   const { chain, rpcUrl } = useSettings()
@@ -172,16 +172,16 @@ export default function ContractCallTool() {
         <option value="">Custom</option>
         {PRESETS.map((p) => (
           <option key={p.id} value={p.id}>
-            {p.label}
+            {p.contract}: {p.label}
           </option>
         ))}
       </select>
 
-      <label>Contract address</label>
+      <label>{preset ? `${preset.contract} address` : 'Contract address'}</label>
       <input
         value={address}
         onChange={(e) => setAddress(e.target.value)}
-        placeholder="0x… (pair address on Sepolia)"
+        placeholder="0x…"
         spellCheck={false}
       />
 

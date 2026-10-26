@@ -10,6 +10,8 @@ export type PresetField = {
 export type Preset = {
   /** Stable id used in the URL and dropdown. */
   id: string
+  /** Contract the preset targets, shown in the dropdown and address label. */
+  contract: string
   /** Human-readable dropdown label. */
   label: string
   /** Whether the call reads (eth_call) or writes (signed tx). */
@@ -24,6 +26,7 @@ export type Preset = {
   buildArgs: (values: string[]) => unknown[]
 }
 
+const STABLE_SWAP_PAIR = 'AgoraStableSwapPair'
 const SET_APPROVED_SWAPPERS_ABI =
   'function setApprovedSwappers(address[] _approvedSwappers, bool _setApproved)'
 const HAS_ROLE_ABI = 'function hasRole(string _role, address _address) view returns (bool)'
@@ -33,6 +36,7 @@ export const PRESETS: Preset[] = [
   {
     id: 'grant-approved-swapper',
     label: 'Grant APPROVED_SWAPPER',
+    contract: STABLE_SWAP_PAIR,
     kind: 'write',
     abi: SET_APPROVED_SWAPPERS_ABI,
     functionName: 'setApprovedSwappers',
@@ -42,6 +46,7 @@ export const PRESETS: Preset[] = [
   {
     id: 'revoke-approved-swapper',
     label: 'Revoke APPROVED_SWAPPER',
+    contract: STABLE_SWAP_PAIR,
     kind: 'write',
     abi: SET_APPROVED_SWAPPERS_ABI,
     functionName: 'setApprovedSwappers',
@@ -50,7 +55,8 @@ export const PRESETS: Preset[] = [
   },
   {
     id: 'check-approved-swapper',
-    label: 'Check approval status',
+    label: 'Check APPROVED_SWAPPER',
+    contract: STABLE_SWAP_PAIR,
     kind: 'read',
     abi: HAS_ROLE_ABI,
     functionName: 'hasRole',
