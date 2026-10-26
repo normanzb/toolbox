@@ -12,15 +12,20 @@ const STORAGE_KEY = 'toolbox.settings'
 
 /** Global app settings. */
 export type Settings = {
-  /** Active chain id. */
+  /** Selected preset chain id; ignored while `custom` is set. */
   chainId: number
+  /** Use the manually entered chain instead of a preset. */
+  custom: boolean
+  /** Raw text so a half-typed id survives; parsed into `chain.id`. */
+  customChainId: string
+  customChainName: string
   /** JSON-RPC endpoint per chain id. */
   rpcUrls: Record<number, string>
 }
 
 type SettingsContextValue = {
   settings: Settings
-  /** Active chain. */
+  /** Active chain; a custom chain with an invalid id gets id 0. */
   chain: Chain
   /** RPC URL of the active chain. */
   rpcUrl: string
@@ -35,6 +40,9 @@ type SettingsContextValue = {
 
 const defaultSettings: Settings = {
   chainId: 1,
+  custom: false,
+  customChainId: '',
+  customChainName: '',
   rpcUrls: Object.fromEntries(CHAINS.map((chain) => [chain.id, chain.rpcUrl])),
 }
 
@@ -49,10 +57,19 @@ export function SettingsProvider({ children }: PropsWithChildren) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings))
   }, [settings])
 
+  const chain = settings.custom
+    ? {
+        id: parseChainId(settings.customChainId) ?? 0,
+        name: settings.customChainName.trim() || 'Custom chain',
+        rpcUrl: '',
+      }
+    : (CHAINS.find((c) => c.id === settings.chainId) ?? CHAINS[0])
+
   // Keep the active chain in the URL so links are shareable. RPC URLs stay local.
   useEffect(() => {
-    writeUrlParam('chain', String(settings.chainId))
-  }, [settings.chainId])
+    writeUrlParam('chain', chain.id ? String(chain.id) : '')
+    writeUrlParam('chain-name', settings.custom ? settings.customChainName.trim() : '')
+  }, [chain.id, settings.custom, settings.customChainName])
 
   const update = (patch: Partial<Settings>) =>
     setSettings((current) => ({ ...current, ...patch }))
@@ -63,14 +80,12 @@ export function SettingsProvider({ children }: PropsWithChildren) {
       rpcUrls: { ...current.rpcUrls, [chainId]: url },
     }))
 
-  const chain = CHAINS.find((c) => c.id === settings.chainId) ?? CHAINS[0]
-
   return (
     <SettingsContext.Provider
       value={{
         settings,
         chain,
-        rpcUrl: settings.rpcUrls[settings.chainId] ?? '',
+        rpcUrl: settings.rpcUrls[chain.id] ?? '',
         update,
         setRpcUrl,
         privateKey,
@@ -96,15 +111,32 @@ function loadSettings(): Settings {
   } catch {
     // Ignore corrupt storage.
   }
-  // The chain in a shared URL wins over the locally stored one.
-  const urlChainId = Number(readUrlParam('chain'))
-  const chainId = CHAINS.some((c) => c.id === urlChainId)
-    ? urlChainId
-    : CHAINS.some((c) => c.id === stored.chainId)
-      ? (stored.chainId as number)
-      : defaultSettings.chainId
-  return {
-    chainId,
+  const storedChainId = CHAINS.some((c) => c.id === stored.chainId)
+    ? (stored.chainId as number)
+    : defaultSettings.chainId
+  const base: Settings = {
+    chainId: storedChainId,
+    custom: stored.custom === true,
+    customChainId: typeof stored.customChainId === 'string' ? stored.customChainId : '',
+    customChainName: typeof stored.customChainName === 'string' ? stored.customChainName : '',
     rpcUrls: { ...defaultSettings.rpcUrls, ...stored.rpcUrls },
   }
+  // The chain in a shared URL wins over the locally stored one; an unknown id means a custom chain.
+  const urlChainId = parseChainId(readUrlParam('chain') ?? '')
+  if (urlChainId === null) return base
+  if (CHAINS.some((c) => c.id === urlChainId)) return { ...base, chainId: urlChainId, custom: false }
+  return {
+    ...base,
+    custom: true,
+    customChainId: String(urlChainId),
+    customChainName: readUrlParam('chain-name') ?? '',
+  }
+}
+
+/** Parses a positive integer chain id; null when invalid. */
+export function parseChainId(input: string): number | null {
+  const trimmed = input.trim()
+  if (!/^\d+$/.test(trimmed)) return null
+  const id = Number(trimmed)
+  return id > 0 && Number.isSafeInteger(id) ? id : null
 }

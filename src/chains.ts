@@ -12,6 +12,11 @@ export type Chain = {
 export const CHAINS: Chain[] = [
   { id: 42161, name: 'Arbitrum One', rpcUrl: 'https://arbitrum-one-rpc.publicnode.com' },
   { id: 43114, name: 'Avalanche C-Chain', rpcUrl: 'https://avalanche-c-chain-rpc.publicnode.com' },
+  {
+    id: 43113,
+    name: 'Avalanche Fuji (testnet)',
+    rpcUrl: 'https://avalanche-fuji-c-chain-rpc.publicnode.com',
+  },
   { id: 8453, name: 'Base', rpcUrl: 'https://base-rpc.publicnode.com' },
   { id: 56, name: 'BNB Smart Chain', rpcUrl: 'https://bsc-rpc.publicnode.com' },
   { id: 1, name: 'Ethereum', rpcUrl: 'https://ethereum-rpc.publicnode.com' },
