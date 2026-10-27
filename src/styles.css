@@ -283,6 +283,56 @@ button:disabled {
   font-size: 0.85rem;
 }
 
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tabs button {
+  margin-top: 0;
+}
+
+.tabs button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.cheatsheet-table {
+  overflow-x: auto;
+}
+
+.cheatsheet-table table {
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.cheatsheet-table th,
+.cheatsheet-table td {
+  padding: 0.35rem 0.6rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.cheatsheet-table thead th {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.cheatsheet-table tbody th {
+  text-align: left;
+  font-weight: 500;
+}
+
+.cheatsheet-table tbody tr:nth-child(odd) {
+  background: var(--field);
+}
+
+.cheatsheet-table td {
+  color: var(--error);
+  font-weight: 700;
+}
+
 .cheatsheet-filter {
   margin-bottom: var(--gap);
 }

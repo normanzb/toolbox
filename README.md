@@ -16,9 +16,14 @@ A client-side Ethereum developer toolbox built with React + Vite + [viem](https:
 - **Authenticator code** — paste a base32 authenticator key to get the live 6-digit TOTP code
 - **Authenticator export decoder** — paste a Google Authenticator export URL (`otpauth-migration://offline?data=…`) to get each account's base32 authenticator key
 
-### Foundry cheatsheet (`/cheatsheet/`)
+### Cheatsheets (`/cheatsheet/`)
 
-Filterable, copyable cast / anvil / forge commands: probing nodes, simulating transfers, forking mainnet with a custom chain ID, impersonation and other anvil state tricks.
+Filterable, copyable snippets, one tab per topic:
+
+- **Foundry** — cast / anvil / forge: probing nodes, simulating transfers, forking mainnet with a custom chain ID, impersonation and other anvil state tricks
+- **vmalert tests** — vmalert-tool unit test layout, `input_series` value notation, alert and query assertions
+- **Grafana queries** — MetricsQL and LogsQL panel queries, Grafana variables, logs-as-table setup
+- **Postgres locks** — table and row lock modes from weakest to strongest, conflict matrices, lock debugging queries
 
 All cryptography runs locally in the browser. Still, don't paste private keys that hold real funds — the contract caller's write path can use an admin key, so prefer the injected wallet.
 

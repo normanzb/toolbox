@@ -1,46 +1,98 @@
 import { useState } from 'react'
-import { CHEATSHEET, type Command } from './cheatsheet'
+import { CHEATSHEETS } from './cheatsheets'
+import type { Command, CommandGroup, Table } from './cheatsheets/types'
 import NavBar from './components/NavBar'
 import Section from './components/Section'
+import { useUrlParam } from './urlState'
 
-/** Foundry / anvil command cheatsheet page with a text filter. */
+/** Cheatsheet page: one tab per sheet, with a text filter. */
 export default function CheatsheetApp() {
+  const [sheetId, setSheetId] = useUrlParam('sheet', CHEATSHEETS[0].id)
   const [filter, setFilter] = useState('')
+  const sheet = CHEATSHEETS.find((s) => s.id === sheetId) ?? CHEATSHEETS[0]
   const query = filter.trim().toLowerCase()
-  const matches = (c: Command) =>
-    !query || [c.title, c.cmd, c.note ?? ''].some((s) => s.toLowerCase().includes(query))
-  const groups = CHEATSHEET.map((g) => ({ ...g, commands: g.commands.filter(matches) })).filter(
-    (g) => g.commands.length,
+  const has = (s: string) => s.toLowerCase().includes(query)
+  const matches = (c: Command) => !query || [c.title, c.cmd, c.note ?? ''].some(has)
+  const tableMatches = (g: CommandGroup) =>
+    !!g.table &&
+    (!query || has(g.title) || has(g.description ?? '') || g.table.rows.flat().some(has))
+  const groups = sheet.groups
+    .map((g) => ({ ...g, commands: g.commands.filter(matches), table: tableMatches(g) ? g.table : undefined }))
+    .filter((g) => g.commands.length || g.table)
+
+  const renderGroup = (g: CommandGroup) => (
+    <Section key={g.title} title={g.title} description={g.description}>
+      {g.table && <TableBlock table={g.table} />}
+      {g.commands.map((c) => (
+        <CommandBlock key={c.title} command={c} />
+      ))}
+    </Section>
   )
 
   return (
     <>
       <NavBar current="cheatsheet" />
       <main className="app">
-        <h1>Foundry Cheatsheet</h1>
-        <p>
-          cast, anvil and forge commands for probing nodes, simulating transactions and running
-          local forks. <code>$VARS</code> are placeholders to export or substitute.
-        </p>
+        <h1>Cheatsheets</h1>
+        <div className="tabs" role="tablist">
+          {CHEATSHEETS.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              role="tab"
+              aria-selected={s.id === sheet.id}
+              className={s.id === sheet.id ? 'active' : undefined}
+              onClick={() => setSheetId(s.id)}
+            >
+              {s.title}
+            </button>
+          ))}
+        </div>
+        <p>{sheet.description}</p>
         <input
           className="cheatsheet-filter"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          placeholder="Filter, e.g. impersonate, fork, decode"
+          placeholder={`Filter ${sheet.title}`}
           spellCheck={false}
         />
-        {!groups.length && <p className="error">No commands match.</p>}
-        <div className="masonry">
-          {groups.map((g) => (
-            <Section key={g.title} title={g.title} description={g.description}>
-              {g.commands.map((c) => (
-                <CommandBlock key={c.title} command={c} />
-              ))}
-            </Section>
-          ))}
-        </div>
+        {!groups.length && <p className="error">Nothing matches.</p>}
+        {groups.filter((g) => g.wide).map(renderGroup)}
+        <div className="masonry">{groups.filter((g) => !g.wide).map(renderGroup)}</div>
       </main>
     </>
+  )
+}
+
+/** Props for {@link TableBlock}. */
+type TableBlockProps = {
+  table: Table
+}
+
+/** A compact reference table; first column is the row header. */
+function TableBlock({ table }: TableBlockProps) {
+  return (
+    <div className="cheatsheet-table">
+      <table>
+        <thead>
+          <tr>
+            {table.columns.map((c) => (
+              <th key={c}>{c}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {table.rows.map(([head, ...cells]) => (
+            <tr key={head}>
+              <th>{head}</th>
+              {cells.map((c, i) => (
+                <td key={table.columns[i + 1]}>{c}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 

@@ -11,7 +11,7 @@ export default function NavBar({ current }: NavBarProps) {
   const links = [
     { id: 'ethereum', label: 'Ethereum', href: root },
     { id: '2fa', label: '2FA', href: `${root}2fa/` },
-    { id: 'cheatsheet', label: 'Foundry cheatsheet', href: `${root}cheatsheet/` },
+    { id: 'cheatsheet', label: 'Cheatsheets', href: `${root}cheatsheet/` },
   ] as const
 
   return (
