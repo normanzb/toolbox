@@ -1,5 +1,6 @@
 import NavBar from './components/NavBar'
-import AuthenticatorMigrationTool from './tools/AuthenticatorMigrationTool'
+import OtpUriTool from './tools/OtpUriTool'
+import QrImportTool from './tools/QrImportTool'
 import TotpTool from './tools/TotpTool'
 
 /** 2FA toolbox page, all client-side. */
@@ -15,7 +16,8 @@ export default function TwoFactorApp() {
         </p>
         <div className="masonry">
           <TotpTool />
-          <AuthenticatorMigrationTool />
+          <OtpUriTool />
+          <QrImportTool />
         </div>
       </main>
     </>

@@ -14,7 +14,8 @@ A client-side Ethereum developer toolbox built with React + Vite + [viem](https:
 ### 2FA Toolbox (`/2fa/`)
 
 - **Authenticator code** — paste a base32 authenticator key to get the live 6-digit TOTP code
-- **Authenticator export decoder** — paste a Google Authenticator export URL (`otpauth-migration://offline?data=…`) to get each account's base32 authenticator key
+- **Authenticator URI decoder** — paste a 2FA setup URI (`otpauth://totp/…`) or a Google Authenticator export (`otpauth-migration://offline?data=…`) to get each account's base32 authenticator key
+- **QR code reader** — upload or paste (Cmd/Ctrl+V) a QR code image; decodes it locally and extracts the same keys
 
 ### Cheatsheets (`/cheatsheet/`)
 

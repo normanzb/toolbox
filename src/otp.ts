@@ -1,13 +1,11 @@
-import { useMemo, useState } from 'react'
-import CopyField from '../components/CopyField'
-import Section from '../components/Section'
-
-/** One account from a Google Authenticator export. */
-type OtpAccount = {
+/** One authenticator account extracted from an otpauth or otpauth-migration URI. */
+export type OtpAccount = {
   /** Base32 authenticator key. */
   secret: string
   name: string
   issuer: string
+  /** Non-default settings worth showing, e.g. "8 digits"; empty for Google Authenticator defaults. */
+  settings: string[]
 }
 
 /** Reads a protobuf varint at `pos`; returns the value and the next position. */
@@ -70,7 +68,7 @@ function base32(bytes: Uint8Array): string {
  * Decodes an otpauth-migration URL. Payload is a MigrationPayload protobuf whose
  * field 1 repeats OtpParameters { 1: secret, 2: name, 3: issuer }.
  */
-function decodeMigration(input: string): OtpAccount[] {
+export function decodeMigration(input: string): OtpAccount[] {
   const data = new URL(input.trim()).searchParams.get('data')
   if (!data) throw new Error('Missing data param')
   // get() decodes an unescaped base64 '+' as a space; restore it.
@@ -90,46 +88,58 @@ function decodeMigration(input: string): OtpAccount[] {
         secret: base32(secret),
         name: name instanceof Uint8Array ? text.decode(name) : '',
         issuer: issuer instanceof Uint8Array ? text.decode(issuer) : '',
+        settings: [],
       }
     })
 }
 
-/** Extracts authenticator keys from a Google Authenticator export QR URL. */
-export default function AuthenticatorMigrationTool() {
-  // Not URL-synced: the payload holds live 2FA secrets.
-  const [input, setInput] = useState('')
 
-  const result = useMemo(() => {
-    if (!input.trim()) return null
-    try {
-      const accounts = decodeMigration(input)
-      return accounts.length ? { accounts } : { error: 'No accounts in payload' }
-    } catch (e) {
-      return { error: `Invalid migration URL: ${(e as Error).message}` }
-    }
-  }, [input])
+/** Decodes percent-escapes repeatedly, since some issuers encode the label twice (%2520). */
+function decodeAll(value: string): string {
+  let current = value
+  for (let i = 0; i < 3 && /%[0-9a-f]{2}/i.test(current); i++) {
+    current = decodeURIComponent(current)
+  }
+  return current
+}
 
-  return (
-    <Section
-      title="Authenticator export decoder"
-      description="Decodes a Google Authenticator export QR (otpauth-migration://offline?data=…) into base32 authenticator keys."
-    >
-      <label>Migration URL</label>
-      <input
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="otpauth-migration://offline?data=…"
-        spellCheck={false}
-        autoComplete="off"
-      />
-      {result?.error && <p className="error">{result.error}</p>}
-      {result?.accounts?.map((a, i) => (
-        <CopyField
-          key={i}
-          label={[a.issuer, a.name].filter(Boolean).join(' · ') || `Account ${i + 1}`}
-          value={a.secret}
-        />
-      ))}
-    </Section>
-  )
+/** Parses an otpauth://totp or otpauth://hotp key URI (the QR shown when you first set up 2FA). */
+export function parseOtpauth(input: string): OtpAccount {
+  const url = new URL(input.trim())
+  const params = url.searchParams
+  const secret = (params.get('secret') ?? '').toUpperCase().replace(/[\s=]/g, '')
+  if (!secret) throw new Error('Missing secret param')
+  if (!/^[A-Z2-7]+$/.test(secret)) throw new Error('Secret is not base32')
+
+  // The label is "Issuer:account" or just "account".
+  const label = decodeAll(url.pathname.replace(/^\//, ''))
+  const colon = label.indexOf(':')
+  const labelIssuer = colon < 0 ? '' : label.slice(0, colon).trim()
+  const name = (colon < 0 ? label : label.slice(colon + 1)).trim()
+
+  // An issuer form-encoded twice arrives as "Agora+Platform"; restore its spaces.
+  const rawIssuer = decodeAll(params.get('issuer') ?? '')
+  const isDoubleEncoded = rawIssuer.includes('+') && !rawIssuer.includes(' ')
+  const issuer = (isDoubleEncoded ? rawIssuer.replaceAll('+', ' ') : rawIssuer) || labelIssuer
+
+  // Only list what differs from the defaults the code generator assumes.
+  const settings = []
+  const type = url.host.toLowerCase()
+  if (type !== 'totp') settings.push(`type ${type}`)
+  const algorithm = (params.get('algorithm') ?? 'SHA1').toUpperCase()
+  if (algorithm !== 'SHA1') settings.push(algorithm)
+  const digits = params.get('digits') ?? '6'
+  if (digits !== '6') settings.push(`${digits} digits`)
+  const period = params.get('period') ?? '30'
+  if (period !== '30') settings.push(`${period}s period`)
+
+  return { secret, name, issuer, settings }
+}
+
+/** Extracts accounts from either authenticator URI format. */
+export function parseOtpUri(input: string): OtpAccount[] {
+  const scheme = input.trim().split(':')[0].toLowerCase()
+  if (scheme === 'otpauth') return [parseOtpauth(input)]
+  if (scheme === 'otpauth-migration') return decodeMigration(input)
+  throw new Error('Expected an otpauth:// or otpauth-migration:// URI')
 }

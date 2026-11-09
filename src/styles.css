@@ -333,6 +333,12 @@ button:disabled {
   font-weight: 700;
 }
 
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 .cheatsheet-filter {
   margin-bottom: var(--gap);
 }
