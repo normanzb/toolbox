@@ -333,6 +333,18 @@ button:disabled {
   font-weight: 700;
 }
 
+.qr-camera {
+  display: block;
+  width: 100%;
+  margin-top: 0.75rem;
+  border-radius: 6px;
+  background: #000;
+}
+
+.qr-camera[hidden] {
+  display: none;
+}
+
 .button-row {
   display: flex;
   flex-wrap: wrap;

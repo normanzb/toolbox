@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import NavBar from './components/NavBar'
 import OtpUriTool from './tools/OtpUriTool'
 import QrImportTool from './tools/QrImportTool'
@@ -5,6 +6,8 @@ import TotpTool from './tools/TotpTool'
 
 /** 2FA toolbox page, all client-side. */
 export default function TwoFactorApp() {
+  const [uri, setUri] = useState('')
+
   return (
     <>
       <NavBar current="2fa" />
@@ -16,8 +19,8 @@ export default function TwoFactorApp() {
         </p>
         <div className="masonry">
           <TotpTool />
-          <OtpUriTool />
-          <QrImportTool />
+          <OtpUriTool input={uri} setInput={setUri} />
+          <QrImportTool onUri={setUri} />
         </div>
       </main>
     </>

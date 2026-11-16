@@ -1,12 +1,17 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import OtpAccountList from '../components/OtpAccountList'
 import Section from '../components/Section'
 import { parseOtpUri } from '../otp'
 
+/** Props for {@link OtpUriTool}. */
+type OtpUriToolProps = {
+  /** URI text; owned by the page so the QR reader can fill it. Not URL-synced: it holds live 2FA secrets. */
+  input: string
+  setInput: (input: string) => void
+}
+
 /** Extracts authenticator keys from an otpauth:// or Google Authenticator export URI. */
-export default function OtpUriTool() {
-  // Not URL-synced: the URI holds live 2FA secrets.
-  const [input, setInput] = useState('')
+export default function OtpUriTool({ input, setInput }: OtpUriToolProps) {
 
   const result = useMemo(() => {
     if (!input.trim()) return null
